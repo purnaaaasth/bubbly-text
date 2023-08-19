@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bubbly</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+        transition: all 0.35s;
+      }
+      body {
+        background: #010104;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      h1 {
+        color: #b3b3fe;
+        font-size: 5rem;
+        /* text-transform: uppercase; */
+        letter-spacing: 0.1rem;
+        text-align: center;
+        cursor: default;
+        font-weight: 300;
+        /* font-weight: 400; */
+      }
+      /* :where(.hovered, .hovered-adjacent) {
+        color: #ccccfa;
+        font-weight: 400;
+      }
+      :where(.hovered:hover, .hovered-adjacent:hover) {
+        font-weight: 900;
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff, 0 0 80px #fff,
+          0 0 160px #fff;
+      } */
+      .hovered {
+        color: #ccccfa;
+        font-weight: 900;
+      }
+      .hovered-adjacent {
+        color: #ccccfa;
+        font-weight: 400;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="bubble-hover"></h1>
+
+    <script>
+      // const bubbleHover = document.querySelector(".bubble-hover");
+      // const text = bubbleHover.innerText;
+      // const splitText = text.split("");
+      // bubbleHover.innerText = "";
+      // for (let i = 0; i < splitText.length; i++) {
+      //   bubbleHover.innerHTML += `<span>${splitText[i]}</span>`;
+      // }
+      // let char = 0;
+      // let timer = setInterval(onTick, 50);
+      // function onTick() {
+      //   const span = bubbleHover.querySelectorAll("span")[char];
+      //   span.classList.add("hovered");
+      //   char++;
+      //   if (char === splitText.length) {
+      //     complete();
+      //     return;
+      //   }
+      // }
+      // function complete() {
+      //   clearInterval(timer);
+      //   timer = null;
+      // }
+      // bubbleHover.addEventListener("mouseover", (e) => {
+      //   if (e.target.tagName === "SPAN") {
+      //     e.target.classList.add("hovered-adjacent");
+      //   }
+      // });
+      // bubbleHover.addEventListener("mouseout", (e) => {
+      //   if (e.target.tagName === "SPAN") {
+      //     e.target.classList.remove("hovered-adjacent");
+      //   }
+      // });
+
+      // const phrase = "Two files.\n Thousands of variations.\nInfinite possibilities.";
+      const phrase = "Two files.\n Thousands of variations.\nInfinite possibilities.";
+
+      const targetEl = document.querySelector(".bubble-hover");
+
+      phrase.split("").map((char, idx) => {
+        const el = document.createElement("span");
+        el.innerText = char;
+        el.setAttribute("data-index", idx.toString());
+        el.classList.add("hover-char");
+
+        targetEl.appendChild(el);
+      });
+
+      const hoverChars = [...document.getElementsByClassName("hover-char")];
+
+      const removeClasses = () => {
+        hoverChars.map((char) => {
+          char.classList.remove("hovered");
+          char.classList.remove("hovered-adjacent");
+        });
+      };
+
+      // hoverChars.map((char) => {
+      //   char.addEventListener("mouseover", (e) => {
+      //     const index = parseInt(e.target.getAttribute("data-index"));
+      //     hoverChars.forEach((char) => {
+      //       const charIndex = parseInt(char.getAttribute("data-index"));
+      //       if (charIndex === index || charIndex === index + 1 || charIndex === index - 1) {
+      //         char.classList.add("hovered");
+      //       }
+      //     });
+      //   });
+      // });
+
+      // hoverChars.map((char) => {
+      //   char.addEventListener("mouseout", (e) => {
+      //     const index = parseInt(e.target.getAttribute("data-index"));
+      //     hoverChars.forEach((char) => {
+      //       const charIndex = parseInt(char.getAttribute("data-index"));
+      //       if (charIndex === index || charIndex === index + 1 || charIndex === index - 1) {
+      //         char.classList.remove("hovered");
+      //       }
+      //     });
+      //   });
+      // });
+
+      hoverChars.map((char) => {
+        char.addEventListener("mouseover", (e) => {
+          removeClasses();
+
+          const currentElement = e.target;
+          const index = parseInt(currentElement.getAttribute("data-index"), 10);
+
+          const prevIndex = index === 0 ? null : index - 1;
+          const nextIndex = index === phrase.length - 1 ? null : index + 1;
+
+          const prevEl =
+            prevIndex !== null &&
+            document.querySelector(`[data-index="${prevIndex}"]`);
+
+          const nextEl =
+            nextIndex !== null &&
+            document.querySelector(`[data-index="${nextIndex}"]`);
+
+          e.target.classList.add("hovered");
+          prevEl && prevEl.classList.add("hovered-adjacent");
+          nextEl && nextEl.classList.add("hovered-adjacent");
+        });
+      });
+
+      document
+        .querySelector(".bubble-hover")
+        .addEventListener("mouseleave", () => {
+          removeClasses();
+        });
+    </script>
+  </body>
+</html>
