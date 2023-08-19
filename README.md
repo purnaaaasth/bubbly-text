@@ -1,3 +1,3 @@
 ## bubbly-text
 
-Live Deployed Url : 
+Live Deployed Url : https://purnaaaasth.github.io/bubbly-text/
